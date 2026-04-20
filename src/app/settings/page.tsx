@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Settings, User, Bell, Palette, HardDrive, Key, Shield, LogOut, Save } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -20,6 +21,8 @@ interface AppSettings {
 }
 
 export default function SettingsPage() {
+  const router = useRouter()
+  const [activeTab, setActiveTab] = useState('account')
   const [userSettings, setUserSettings] = useState<UserSettings>({
     name: 'User',
     email: 'user@example.com',
@@ -34,7 +37,10 @@ export default function SettingsPage() {
     notifications: true,
   })
   
-  const [activeTab, setActiveTab] = useState('account')
+  const switchTab = (tabId: string) => {
+    setActiveTab(tabId)
+    router.push(`/settings?tab=${tabId}`, { scroll: false })
+  }
 
   const updateUserSetting = (key: keyof UserSettings, value: string) => {
     setUserSettings(prev => ({ ...prev, [key]: value }))
@@ -70,7 +76,7 @@ export default function SettingsPage() {
             {tabs.map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => switchTab(tab.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   activeTab === tab.id
                     ? 'bg-accent-cyan text-ui-bg'

@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Film, Mail, Lock, User, ArrowRight, Loader } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 type AuthMode = 'login' | 'register'
 
 export default function AuthPage() {
+  const router = useRouter()
   const [mode, setMode] = useState<AuthMode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -14,17 +16,26 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Check if already logged in
+  useEffect(() => {
+    const token = document.cookie.includes('auth_token=')
+    if (token) {
+      router.push('/projects')
+    }
+  }, [router])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
 
-    // Demo: Simulate auth
+    // Demo: Simulate auth - set cookie
+    document.cookie = 'auth_token=demo_user; path=/; max-age=86400'
+    
     setTimeout(() => {
       setIsLoading(false)
-      // Redirect to home after successful login
-      window.location.href = '/'
-    }, 1500)
+      router.push('/projects')
+    }, 800)
   }
 
   return (
