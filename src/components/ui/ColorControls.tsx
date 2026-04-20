@@ -1,10 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { FaPalette } from 'react-icons/fa'
 import { COLOR_PRESETS } from '@/lib/constants/colors'
-import { cn } from '@/lib/utils/cn'
 import { ColorPreset } from '@/types/video'
 
 interface ColorControlsProps {
@@ -22,23 +20,20 @@ export function ColorControls({ onChange }: ColorControlsProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-sm font-medium text-text-primary mb-2 flex items-center gap-2">
-          <FaPalette className="w-4 h-4" />
+        <h3 className="text-sm font-medium text-white mb-2 flex items-center gap-2">
+          <FaPalette className="w-4 h-4 text-cyan-400" />
           Color Presets
         </h3>
-        <div className="space-y-2">
+        <div className="grid grid-cols-1 gap-2">
           {COLOR_PRESETS.map((preset) => (
-            <motion.button
+            <button
               key={preset.name}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
               onClick={() => handleSelectPreset(preset)}
-              className={cn(
-                'w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left',
+              className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
                 selectedPreset === preset.name
-                  ? 'bg-button-primary text-white'
-                  : 'bg-ui-border text-text-secondary hover:bg-button-secondary hover:text-white'
-              )}
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-[#2a2a3e] text-gray-300 hover:bg-[#3a3a4e]'
+              }`}
             >
               <div className="flex items-center justify-between">
                 <span>{preset.name}</span>
@@ -48,7 +43,7 @@ export function ColorControls({ onChange }: ColorControlsProps) {
                   <span className="text-xs opacity-70">S:{preset.saturation}</span>
                 </div>
               </div>
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>

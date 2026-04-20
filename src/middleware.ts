@@ -5,18 +5,24 @@ import type { NextRequest } from 'next/server'
 const protectedRoutes = ['/projects', '/editor', '/settings', '/export', '/templates']
 
 // Routes that don't require authentication
-const publicRoutes = ['/', '/auth', '/api']
+const publicRoutes = ['/', '/auth']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
   // Allow public routes
-  if (publicRoutes.some(route => pathname === route || pathname.startsWith(route))) {
+  if (publicRoutes.includes(pathname)) {
     return NextResponse.next()
   }
   
-  // For now, allow all routes - Firebase auth is handled client-side
-  // Can enable server-side auth check when needed
+  // Check if accessing protected route without auth token
+  const authToken = request.cookies.get('auth_token')
+  
+  if (!authToken && protectedRoutes.some(route => pathname.startsWith(route))) {
+    const url = new URL('/auth', request.url)
+    return NextResponse.redirect(url)
+  }
+  
   return NextResponse.next()
 }
 

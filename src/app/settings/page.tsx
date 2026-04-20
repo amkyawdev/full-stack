@@ -1,22 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { Settings, User, Bell, Palette, HardDrive, Key, Shield, LogOut, Save } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+import { Settings, User, Palette, HardDrive, Shield, LogOut, Save } from 'lucide-react'
 
 interface UserSettings {
   name: string
   email: string
-  avatar: string
 }
 
 interface AppSettings {
   theme: 'dark' | 'light'
   autoSave: boolean
   videoQuality: 'low' | 'medium' | 'high'
-  defaultResolution: string
   notifications: boolean
 }
 
@@ -26,21 +22,14 @@ export default function SettingsPage() {
   const [userSettings, setUserSettings] = useState<UserSettings>({
     name: 'User',
     email: 'user@example.com',
-    avatar: '',
   })
   
   const [appSettings, setAppSettings] = useState<AppSettings>({
     theme: 'dark',
     autoSave: true,
     videoQuality: 'high',
-    defaultResolution: '1080p',
     notifications: true,
   })
-  
-  const switchTab = (tabId: string) => {
-    setActiveTab(tabId)
-    router.push(`/settings?tab=${tabId}`, { scroll: false })
-  }
 
   const updateUserSetting = (key: keyof UserSettings, value: string) => {
     setUserSettings(prev => ({ ...prev, [key]: value }))
@@ -50,13 +39,9 @@ export default function SettingsPage() {
     setAppSettings(prev => ({ ...prev, [key]: value }))
   }
 
-  const saveSettings = async () => {
-    // Would save to backend/Supabase
-    alert('Settings saved!')
-  }
-
   const handleLogout = () => {
     localStorage.removeItem('auth_token')
+    localStorage.removeItem('auth_user')
     router.push('/auth')
   }
 
@@ -68,10 +53,10 @@ export default function SettingsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-ui-bg p-4 md:p-8">
+    <div className="min-h-screen bg-[#0f0f1a] p-4 md:p-8 pb-24">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3 mb-8">
-          <Settings className="w-8 h-8 text-accent-cyan" />
+        <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3 mb-8 text-white">
+          <Settings className="w-8 h-8 text-cyan-400" />
           Settings
         </h1>
 
@@ -81,11 +66,11 @@ export default function SettingsPage() {
             {tabs.map(tab => (
               <button
                 key={tab.id}
-                onClick={() => switchTab(tab.id)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   activeTab === tab.id
-                    ? 'bg-accent-cyan text-ui-bg'
-                    : 'hover:bg-ui-panel'
+                    ? 'bg-cyan-500 text-black'
+                    : 'text-gray-400 hover:bg-[#1a1a2e]'
                 }`}
               >
                 <tab.icon className="w-5 h-5" />
@@ -95,87 +80,66 @@ export default function SettingsPage() {
           </div>
 
           {/* Content */}
-          <div className="flex-1 bg-ui-panel rounded-xl p-6">
+          <div className="flex-1 bg-[#1a1a2e] rounded-xl p-6">
             {activeTab === 'account' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="space-y-6"
-              >
-                <h2 className="text-xl font-medium">Account Settings</h2>
+              <div className="space-y-6">
+                <h2 className="text-xl font-medium text-white">Account Settings</h2>
                 
                 {/* Avatar */}
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-full bg-accent-cyan/20 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-accent-cyan">
+                  <div className="w-20 h-20 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-cyan-400">
                       {userSettings.name.charAt(0)}
                     </span>
                   </div>
-                  <Button variant="secondary" size="sm">Change Avatar</Button>
+                  <button className="px-4 py-2 bg-[#2a2a3e] text-white rounded-lg text-sm hover:bg-[#3a3a4e]">
+                    Change Avatar
+                  </button>
                 </div>
 
                 {/* Form */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm mb-2">Name</label>
+                    <label className="block text-sm mb-2 text-gray-300">Name</label>
                     <input
                       type="text"
                       value={userSettings.name}
                       onChange={(e) => updateUserSetting('name', e.target.value)}
-                      className="w-full px-4 py-2 bg-ui-bg rounded-lg border border-ui-border focus:border-accent-cyan outline-none"
+                      className="w-full px-4 py-2 bg-[#0f0f1a] rounded-lg border border-[#2a2a3e] focus:border-cyan-400 outline-none text-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm mb-2">Email</label>
+                    <label className="block text-sm mb-2 text-gray-300">Email</label>
                     <input
                       type="email"
                       value={userSettings.email}
                       onChange={(e) => updateUserSetting('email', e.target.value)}
-                      className="w-full px-4 py-2 bg-ui-bg rounded-lg border border-ui-border focus:border-accent-cyan outline-none"
+                      className="w-full px-4 py-2 bg-[#0f0f1a] rounded-lg border border-[#2a2a3e] focus:border-cyan-400 outline-none text-white"
                     />
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-2">API Key</label>
-                    <div className="flex gap-2">
-                      <input
-                        type="password"
-                        value="••••••••••••"
-                        readOnly
-                        className="flex-1 px-4 py-2 bg-ui-bg rounded-lg border border-ui-border"
-                      />
-                      <Button variant="secondary" size="sm">
-                        <Key className="w-4 h-4 mr-2" />
-                        Update
-                      </Button>
-                    </div>
                   </div>
                 </div>
 
-                <Button onClick={saveSettings}>
-                  <Save className="w-4 h-4 mr-2" />
+                <button className="px-4 py-2 bg-cyan-500 text-white rounded-lg flex items-center gap-2 hover:bg-cyan-600">
+                  <Save className="w-4 h-4" />
                   Save Changes
-                </Button>
-              </motion.div>
+                </button>
+              </div>
             )}
 
             {activeTab === 'preferences' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="space-y-6"
-              >
-                <h2 className="text-xl font-medium">Preferences</h2>
+              <div className="space-y-6">
+                <h2 className="text-xl font-medium text-white">Preferences</h2>
 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="font-medium">Theme</span>
-                      <p className="text-sm text-text-secondary">Choose app theme</p>
+                      <span className="font-medium text-white">Theme</span>
+                      <p className="text-sm text-gray-400">Choose app theme</p>
                     </div>
                     <select
                       value={appSettings.theme}
                       onChange={(e) => updateAppSetting('theme', e.target.value)}
-                      className="px-4 py-2 bg-ui-bg rounded-lg border border-ui-border"
+                      className="px-4 py-2 bg-[#0f0f1a] rounded-lg border border-[#2a2a3e] text-white"
                     >
                       <option value="dark">Dark</option>
                       <option value="light">Light</option>
@@ -184,13 +148,13 @@ export default function SettingsPage() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="font-medium">Auto Save</span>
-                      <p className="text-sm text-text-secondary">Automatically save changes</p>
+                      <span className="font-medium text-white">Auto Save</span>
+                      <p className="text-sm text-gray-400">Automatically save changes</p>
                     </div>
                     <button
                       onClick={() => updateAppSetting('autoSave', !appSettings.autoSave)}
                       className={`w-12 h-6 rounded-full transition-colors ${
-                        appSettings.autoSave ? 'bg-accent-cyan' : 'bg-ui-border'
+                        appSettings.autoSave ? 'bg-cyan-500' : 'bg-[#2a2a3e]'
                       }`}
                     >
                       <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
@@ -201,29 +165,13 @@ export default function SettingsPage() {
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="font-medium">Video Quality</span>
-                      <p className="text-sm text-text-secondary">Default export quality</p>
-                    </div>
-                    <select
-                      value={appSettings.videoQuality}
-                      onChange={(e) => updateAppSetting('videoQuality', e.target.value)}
-                      className="px-4 py-2 bg-ui-bg rounded-lg border border-ui-border"
-                    >
-                      <option value="low">Low (480p)</option>
-                      <option value="medium">Medium (720p)</option>
-                      <option value="high">High (1080p+)</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="font-medium">Notifications</span>
-                      <p className="text-sm text-text-secondary">Push notifications</p>
+                      <span className="font-medium text-white">Notifications</span>
+                      <p className="text-sm text-gray-400">Push notifications</p>
                     </div>
                     <button
                       onClick={() => updateAppSetting('notifications', !appSettings.notifications)}
                       className={`w-12 h-6 rounded-full transition-colors ${
-                        appSettings.notifications ? 'bg-accent-cyan' : 'bg-ui-border'
+                        appSettings.notifications ? 'bg-cyan-500' : 'bg-[#2a2a3e]'
                       }`}
                     >
                       <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
@@ -233,99 +181,57 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <Button onClick={saveSettings}>
-                  <Save className="w-4 h-4 mr-2" />
+                <button className="px-4 py-2 bg-cyan-500 text-white rounded-lg flex items-center gap-2 hover:bg-cyan-600">
+                  <Save className="w-4 h-4" />
                   Save Preferences
-                </Button>
-              </motion.div>
+                </button>
+              </div>
             )}
 
             {activeTab === 'storage' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="space-y-6"
-              >
-                <h2 className="text-xl font-medium">Storage</h2>
+              <div className="space-y-6">
+                <h2 className="text-xl font-medium text-white">Storage</h2>
 
                 <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between mb-2">
+                    <div className="flex justify-between mb-2 text-gray-300">
                       <span>Used Storage</span>
                       <span>2.4 GB / 10 GB</span>
                     </div>
-                    <div className="h-3 bg-ui-bg rounded-full overflow-hidden">
-                      <div className="h-full w-1/4 bg-accent-cyan rounded-full" />
+                    <div className="h-3 bg-[#0f0f1a] rounded-full overflow-hidden">
+                      <div className="h-full w-1/4 bg-cyan-500 rounded-full" />
                     </div>
                   </div>
 
-                  <div className="p-4 bg-ui-bg rounded-lg">
-                    <h3 className="font-medium mb-2">Storage Breakdown</h3>
-                    <ul className="space-y-2 text-sm text-text-secondary">
-                      <li className="flex justify-between">
-                        <span>Videos</span>
-                        <span>2.1 GB</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span>Exports</span>
-                        <span>200 MB</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span>Thumbnails</span>
-                        <span>50 MB</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span>Temporary</span>
-                        <span>50 MB</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <Button variant="secondary">
-                    <HardDrive className="w-4 h-4 mr-2" />
+                  <button className="px-4 py-2 bg-[#2a2a3e] text-white rounded-lg flex items-center gap-2 hover:bg-[#3a3a4e]">
+                    <HardDrive className="w-4 h-4" />
                     Manage Storage
-                  </Button>
+                  </button>
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {activeTab === 'security' && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="space-y-6"
-              >
-                <h2 className="text-xl font-medium">Security</h2>
+              <div className="space-y-6">
+                <h2 className="text-xl font-medium text-white">Security</h2>
 
                 <div className="space-y-4">
-                  <div className="p-4 bg-ui-bg rounded-lg">
-                    <h3 className="font-medium mb-2">Two-Factor Authentication</h3>
-                    <p className="text-sm text-text-secondary mb-3">
+                  <div className="p-4 bg-[#0f0f1a] rounded-lg">
+                    <h3 className="font-medium mb-2 text-white">Two-Factor Authentication</h3>
+                    <p className="text-sm text-gray-400 mb-3">
                       Add extra security to your account
                     </p>
-                    <Button variant="secondary" size="sm">Enable 2FA</Button>
+                    <button className="px-4 py-2 bg-[#2a2a3e] text-white rounded-lg text-sm hover:bg-[#3a3a4e]">
+                      Enable 2FA
+                    </button>
                   </div>
 
-                  <div className="p-4 bg-ui-bg rounded-lg">
-                    <h3 className="font-medium mb-2">Active Sessions</h3>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex justify-between items-center">
-                        <span>Chrome on Windows</span>
-                        <span className="text-green-500">Active now</span>
-                      </li>
-                      <li className="flex justify-between items-center">
-                        <span>Safari on iPhone</span>
-                        <span className="text-text-secondary">Last seen 2h ago</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <Button variant="danger" onClick={handleLogout}>
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out All Devices
-                  </Button>
+                  <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded-lg flex items-center gap-2 hover:bg-red-600">
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
                 </div>
-              </motion.div>
+              </div>
             )}
           </div>
         </div>
