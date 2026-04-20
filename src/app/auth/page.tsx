@@ -18,7 +18,7 @@ export default function AuthPage() {
 
   // Check if already logged in
   useEffect(() => {
-    const token = document.cookie.includes('auth_token=')
+    const token = localStorage.getItem('auth_token')
     if (token) {
       router.push('/projects')
     }
@@ -29,8 +29,8 @@ export default function AuthPage() {
     setIsLoading(true)
     setError('')
 
-    // Demo: Simulate auth - set cookie
-    document.cookie = 'auth_token=demo_user; path=/; max-age=86400'
+    // Demo: Simulate auth - use localStorage
+    localStorage.setItem('auth_token', 'demo_user')
     
     setTimeout(() => {
       setIsLoading(false)

@@ -55,6 +55,11 @@ export default function SettingsPage() {
     alert('Settings saved!')
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('auth_token')
+    router.push('/auth')
+  }
+
   const tabs = [
     { id: 'account', label: 'Account', icon: User },
     { id: 'preferences', label: 'Preferences', icon: Palette },
@@ -315,7 +320,7 @@ export default function SettingsPage() {
                     </ul>
                   </div>
 
-                  <Button variant="danger">
+                  <Button variant="danger" onClick={handleLogout}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out All Devices
                   </Button>
