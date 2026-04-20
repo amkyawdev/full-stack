@@ -1,12 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { 
   Home, Film, Sparkles, Download, Upload, Settings, HelpCircle,
   FileVideo, Crop, Palette, Type, Layers, Save, Undo, Redo
 } from 'lucide-react'
-import { cn } from '@/lib/utils/cn'
 import { Button } from './Button'
 
 const menus = [
@@ -51,48 +49,41 @@ const menus = [
 
 export function DesktopMenuBar() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
-  const [activeMenuIndex, setActiveMenuIndex] = useState(-1)
 
   return (
-    <nav className="hidden md:flex items-center h-10 bg-primary-dark border-b border-ui-border px-4">
+    <nav className="hidden md:flex items-center h-10 bg-[#0f0f1a] border-b border-[#2a2a3e] px-4">
       {/* Logo */}
       <div className="flex items-center gap-2 mr-6">
-        <Film className="w-5 h-5 text-accent-cyan" />
-        <span className="text-sm font-medium text-text-primary">Movie Editor</span>
+        <Film className="w-5 h-5 text-cyan-400" />
+        <span className="text-sm font-medium text-white">Movie Editor</span>
       </div>
 
       {/* Menu items */}
       <div className="flex items-center">
-        {menus.map((menu, index) => (
+        {menus.map((menu) => (
           <div key={menu.label} className="relative">
             <button
               onClick={() => {
                 setActiveMenu(activeMenu === menu.label ? null : menu.label)
-                setActiveMenuIndex(index)
               }}
-              className={cn(
-                'px-3 py-1.5 text-sm rounded transition-colors',
+              className={`px-3 py-1.5 text-sm rounded transition-colors ${
                 activeMenu === menu.label
-                  ? 'bg-ui-border text-text-primary'
-                  : 'text-text-secondary hover:text-text-primary hover:bg-ui-border/50'
-              )}
+                  ? 'bg-[#2a2a3e] text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-[#2a2a3e]/50'
+              }`}
             >
               {menu.label}
             </button>
             
             {/* Dropdown */}
             {activeMenu === menu.label && (
-              <motion.div
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="absolute top-full left-0 mt-1 min-w-48 bg-ui-panel border border-ui-border rounded-lg shadow-xl overflow-hidden z-50"
-              >
-                {menu.items.map((item, itemIndex) => {
+              <div className="absolute top-full left-0 mt-1 min-w-48 bg-[#1a1a2e] border border-[#2a2a3e] rounded-lg shadow-xl overflow-hidden z-50">
+                {menu.items.map((item) => {
                   const Icon = item.icon
                   return (
                     <button
                       key={item.label}
-                      className="w-full flex items-center justify-between px-3 py-2 text-sm text-text-secondary hover:bg-ui-border hover:text-text-primary"
+                      className="w-full flex items-center justify-between px-3 py-2 text-sm text-gray-400 hover:bg-[#2a2a3e] hover:text-white"
                     >
                       <div className="flex items-center gap-2">
                         <Icon className="w-4 h-4" />
@@ -102,7 +93,7 @@ export function DesktopMenuBar() {
                     </button>
                   )
                 })}
-              </motion.div>
+              </div>
             )}
           </div>
         ))}
@@ -113,16 +104,16 @@ export function DesktopMenuBar() {
 
       {/* Quick actions */}
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="sm" className="text-xs px-2">
+        <button className="p-1.5 rounded text-gray-400 hover:text-white hover:bg-[#2a2a3e]">
           <Undo className="w-3 h-3" />
-        </Button>
-        <Button variant="ghost" size="sm" className="text-xs px-2">
+        </button>
+        <button className="p-1.5 rounded text-gray-400 hover:text-white hover:bg-[#2a2a3e]">
           <Redo className="w-3 h-3" />
-        </Button>
-        <Button variant="primary" size="sm" className="text-xs px-3">
-          <Upload className="w-3 h-3 mr-1" />
+        </button>
+        <button className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-blue-500 text-white hover:bg-blue-600">
+          <Upload className="w-3 h-3" />
           Import
-        </Button>
+        </button>
       </div>
     </nav>
   )
