@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Film, Mail, Lock, User, ArrowRight, Loader } from 'lucide-react'
+import { Film, Mail, Lock, User, ArrowRight, Loader, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { getFirebaseAuth } from '@/lib/firebase'
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth'
 
 type AuthMode = 'login' | 'register'
 
@@ -13,15 +15,20 @@ export default function AuthPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // Check if already logged in
+  // Check auth state
   useEffect(() => {
-    const token = localStorage.getItem('auth_token')
-    if (token) {
-      router.push('/projects')
-    }
+    const auth = getFirebaseAuth()
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push('/projects')
+      } else {
+        setIsLoading(false)
+      }
+    })
+    return () => unsubscribe()
   }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,13 +36,37 @@ export default function AuthPage() {
     setIsLoading(true)
     setError('')
 
-    // Demo: Simulate auth - use localStorage
-    localStorage.setItem('auth_token', 'demo_user')
-    
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      const auth = getFirebaseAuth()
+      if (mode === 'login') {
+        await signInWithEmailAndPassword(auth, email, password)
+      } else {
+        await createUserWithEmailAndPassword(auth, email, password)
+      }
       router.push('/projects')
-    }, 800)
+    } catch (err: any) {
+      console.error('Auth error:', err)
+      setError(err.message || 'Authentication failed')
+      setIsLoading(false)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      const auth = getFirebaseAuth()
+      await signOut(auth)
+      router.push('/auth')
+    } catch (err) {
+      console.error('Logout error:', err)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-ui-bg flex items-center justify-center p-4">
+        <Loader className="w-8 h-8 animate-spin text-cyan-400" />
+      </div>
+    )
   }
 
   return (
