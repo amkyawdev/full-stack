@@ -2,7 +2,8 @@
 
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Film, Upload, Play, Palette, Type, Sparkles, Download } from 'lucide-react'
+import { Film, Upload, Play, Palette, Type, Sparkles, Download, FolderOpen, Settings, Layout } from 'lucide-react'
+import Link from 'next/link'
 import { DesktopMenuBar } from '@/components/ui/DesktopMenuBar'
 import { MobileNavBar } from '@/components/ui/MobileNavBar'
 import { VideoPreview } from '@/components/ui/VideoPreview'
@@ -52,6 +53,25 @@ export default function HomePage() {
               Professional video editing in your browser
             </p>
           </motion.div>
+{/* Quick Links */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <Link href="/projects" className="flex flex-col items-center gap-2 p-4 bg-ui-panel rounded-xl hover:ring-2 hover:ring-accent-cyan transition-all text-center">
+              <FolderOpen className="w-8 h-8 text-accent-cyan" />
+              <span className="text-sm">Projects</span>
+            </Link>
+            <Link href="/templates" className="flex flex-col items-center gap-2 p-4 bg-ui-panel rounded-xl hover:ring-2 hover:ring-accent-cyan transition-all text-center">
+              <Layout className="w-8 h-8 text-accent-purple" />
+              <span className="text-sm">Templates</span>
+            </Link>
+            <Link href="/export" className="flex flex-col items-center gap-2 p-4 bg-ui-panel rounded-xl hover:ring-2 hover:ring-accent-cyan transition-all text-center">
+              <Download className="w-8 h-8 text-accent-pink" />
+              <span className="text-sm">Export</span>
+            </Link>
+            <Link href="/settings" className="flex flex-col items-center gap-2 p-4 bg-ui-panel rounded-xl hover:ring-2 hover:ring-accent-cyan transition-all text-center">
+              <Settings className="w-8 h-8 text-accent-blue" />
+              <span className="text-sm">Settings</span>
+            </Link>
+          </div>
 
           {/* Upload Section */}
           <motion.div
