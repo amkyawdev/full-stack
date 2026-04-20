@@ -1,0 +1,83 @@
+{
+  "name": "Burme Editing Pro",
+  "short_name": "BurmePro",
+  "description": "Advanced Mobile-First Video Editing PWA for Aung Myo Kyaw",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#00f2fe",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["video", "productivity", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Chat Bot",
+      "short_name": "Chat",
+      "url": "/chat",
+      "icons": [{ "src": "/icons/chat.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Translate",
+      "short_name": "Translate",
+      "url": "/translate",
+      "icons": [{ "src": "/icons/translate.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Speak",
+      "short_name": "Speak",
+      "url": "/speak",
+      "icons": [{ "src": "/icons/speak.png", "sizes": "96x96" }]
+    }
+  ]
+}
