@@ -10,11 +10,12 @@ export interface Voice {
 export interface TTSRequest {
   text: string
   voiceId: string
+  language?: string  // 'en', 'my' (Burmese)
   model?: 'eleven_monolingual_v1' | 'eleven_multilingual_v1' | 'eleven_multilingual_v2'
-  stability?: number      // 0-1, higher = more consistent
-  similarityBoost?: number  // 0-1, higher = more similar to voice
-  style?: number       // 0-1, style strength
-  speed?: number       // 0.5-1.5
+  stability?: number
+  similarityBoost?: number
+  style?: number
+  speed?: number
 }
 
 export interface TTSResponse {
@@ -40,7 +41,13 @@ export const DEFAULT_VOICES: Voice[] = [
   { voice_id: 'MFhm3zL1hGWLljD2Eg3d', name: 'Charlie', category: 'male', description: 'Conversational male' },
   { voice_id: 'CwhRB2z5AqE56ndRjQED', name: 'Emily', category: 'female', description: 'Young female' },
   { voice_id: '2E7wii4N3BrlNjlWjG6c', name: 'E2', category: 'multilingual', description: 'Multilingual English' },
+  { voice_id: 'GA7P4lgD1y5Nl7jnyJKi', name: 'F傣族', category: 'female', description: 'Myanmar Female (Multilingual)' },
+  { voice_id: 'aM5jOKK9G1Ny7eLsKMds', name: 'Mမြန်မာ', category: 'male', description: 'Myanmar Male (Multilingual)' },
 ]
+
+// Myanmar language code
+export const LANGUAGE_MY = 'my'
+export const LANGUAGE_MYanmar = 'Burmese (Myanmar)'
 
 // Get API key from environment
 export function getElevenLabsApiKey(): string {

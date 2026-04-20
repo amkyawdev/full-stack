@@ -18,7 +18,8 @@ export async function POST(request: NextRequest) {
     const { 
       text, 
       voiceId = 'EXAVITQu4vf4t0lqLFiM',
-      model = 'eleven_multilingual_v2',
+      language = 'my',  // Default to Burmese for Myanmar voiceover
+      model = 'eleven_multilingual_v2',  // Supports Myanmar
       stability = 0.5,
       similarityBoost = 0.75,
       style = 0.3,
